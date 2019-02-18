@@ -1,0 +1,134 @@
+<html>
+	<head></head>
+	<body>
+		<h1>Swipe Cards</h1>
+		<div class="cards-wrap">
+			<div class="card first">
+				<h5>究竟宇宙有没有尽头？</h5>
+				<button class="option">有就有</button>
+				<button class="option">没有就没有</button>
+			</div>
+			<div class="card second"></div>
+			<div class="card third"></div>
+		</div>
+	</body>
+	<style>
+		body {
+			width: 100vw;
+			height: 100vh;
+			background: salmon;
+			margin: 0;
+		}
+		h1 {
+			color: white;
+			margin-top: 40px;
+			text-align: center;
+		}
+		.cards-wrap {
+			margin-top: 10px;
+			width: 380px;
+			height: 400px;
+			margin: auto;
+			perspective: 100px;
+			perspective-origin: 50% 90%;
+		}
+		.card {
+			width: 320px;
+			height: 240px;
+			padding: 24px 30px;
+			background: #ffffff;
+			box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+			position: absolute;
+			transform-origin: 50% 50%;
+			transition: all 0.8s;
+		}
+		.card.first {
+			transform: translate3d(0, 0, 0px);
+			z-index: 3;
+		}
+
+		.card.second {
+			transform: translate3d(0, 0, -10px);
+			z-index: 2;
+		}
+
+		.card.third {
+			transform: translate3d(0, 0, -20px);
+			z-index: 1;
+		}
+
+		.card.last-card {
+			transform: translate3d(0, 0, -20px);
+			z-index: 1;
+		}
+
+		.card:not(:first-child) {
+			opacity: 0.95;
+		}
+
+		.card.swipe {
+			transform: rotate(30deg) translate3d(120%, -50%, 0px) !important;
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		.card h5 {
+			font-size: 20px;
+			font-weight: 400;
+			margin-bottom: 20px;
+			margin-top: 0;
+		}
+
+		.option {
+			width: 100%;
+			padding: 18px 10px 18px 84px;
+			text-align: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			font-size: 16px;
+			font-weight: 400;
+			background: #f8f8f8 url(ic_option_normal.svg) left 50px center no-repeat;
+			background-size: 24px;
+		}
+
+		.option:nth-child(2) {
+			margin-bottom: 20px;
+		}
+
+		.option:hover,
+		.option.checked {
+			background: #faeeee url(ic_option_checked.svg) left 50px center no-repeat;
+		}
+	</style>
+	<script>
+		const cardWrap = document.querySelector(".cards-wrap");
+		function pickOption() {
+			const topCard = document.querySelector(".card:first-child");
+			const tempStr = topCard.innerHTML;
+			topCard.classList.add("swipe");
+			setTimeout(function() {
+				topCard.remove();
+				const cards = document.querySelectorAll(".card");
+				cards[0].style.transform = "translate3d(0, 0, 0px)";
+				cards[0].style.zIndex = "3";
+				cards[0].innerHTML = tempStr;
+				cards[1].style.transform = "translate3d(0, 0, -10px)";
+				cards[1].style.zIndex = "2";
+				cardWrap.insertAdjacentHTML(
+					"beforeend",
+					'<div class="card last-card"></div>'
+				);
+				const newOptions = document.querySelectorAll(".option");
+				newOptions.forEach(optionBtn =>
+					optionBtn.addEventListener("click", pickOption)
+				);
+			}, 300);
+		}
+
+		const optionBtns = document.querySelectorAll(".option");
+		optionBtns.forEach(optionBtn =>
+			optionBtn.addEventListener("click", pickOption)
+		);
+	</script>
+</html>
